@@ -287,6 +287,9 @@ namespace ShoppingListApi.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -296,6 +299,8 @@ namespace ShoppingListApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ShoppingListId");
+
+                    b.HasIndex("StoreId");
 
                     b.HasIndex("UserId");
 
@@ -364,6 +369,26 @@ namespace ShoppingListApi.Migrations
                     b.ToTable("ShoppingListUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ShoppingListApi.Domain.Entities.Store", b =>
+                {
+                    b.Property<int>("StoreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StoreId"));
+
+                    b.Property<string>("StoreName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StoreId");
+
+                    b.ToTable("Stores", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -428,11 +453,19 @@ namespace ShoppingListApi.Migrations
 
             modelBuilder.Entity("ShoppingListApi.Domain.Entities.ShoppingList", b =>
                 {
+                    b.HasOne("ShoppingListApi.Domain.Entities.Store", "Store")
+                        .WithMany("shoppingLists")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ShoppingListApi.Domain.Entities.ApplicationUser", "User")
                         .WithMany("ShoppingLists")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Store");
 
                     b.Navigation("User");
                 });
@@ -488,6 +521,11 @@ namespace ShoppingListApi.Migrations
             modelBuilder.Entity("ShoppingListApi.Domain.Entities.ShoppingList", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("ShoppingListApi.Domain.Entities.Store", b =>
+                {
+                    b.Navigation("shoppingLists");
                 });
 #pragma warning restore 612, 618
         }

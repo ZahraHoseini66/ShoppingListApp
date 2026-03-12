@@ -30,13 +30,11 @@ public class ShoppingListsController : ApiBaseController
     //}
 
     //[HttpPost]
-    //public IActionResult ShoppingLists([FromBody] ShoppingList shoppingList)
+    //public IActionResult CreateShoppingList([FromBody] ShoppingList shoppingList)
     //{
     //    if (shoppingList == null)
     //    {
     //        return BadRequest();
     //    }
-
-
     //}
 }
