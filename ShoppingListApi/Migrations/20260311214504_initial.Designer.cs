@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingListApi.Data;
 
-
 #nullable disable
 
 namespace ShoppingListApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260302190851_initial")]
+    [Migration("20260311214504_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -285,7 +284,7 @@ namespace ShoppingListApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShoppingListId"));
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
@@ -295,15 +294,13 @@ namespace ShoppingListApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("usersId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ShoppingListId");
 
-                    b.HasIndex("usersId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ShoppingLists", (string)null);
                 });
@@ -357,17 +354,15 @@ namespace ShoppingListApi.Migrations
                     b.Property<int>("ShoppingListId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ShoppingListUserId");
 
                     b.HasIndex("ShoppingListId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ShoppingListUsers", (string)null);
                 });
@@ -425,22 +420,24 @@ namespace ShoppingListApi.Migrations
 
             modelBuilder.Entity("ShoppingListApi.Domain.Entities.Product", b =>
                 {
-                    b.HasOne("ShoppingListApi.Domain.Entities.Category", "category")
+                    b.HasOne("ShoppingListApi.Domain.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("category");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("ShoppingListApi.Domain.Entities.ShoppingList", b =>
                 {
-                    b.HasOne("ShoppingListApi.Domain.Entities.ApplicationUser", "users")
-                        .WithMany()
-                        .HasForeignKey("usersId");
+                    b.HasOne("ShoppingListApi.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("ShoppingLists")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("users");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShoppingListApi.Domain.Entities.ShoppingListItem", b =>
@@ -452,7 +449,7 @@ namespace ShoppingListApi.Migrations
                         .IsRequired();
 
                     b.HasOne("ShoppingListApi.Domain.Entities.ShoppingList", "ShoppingList")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("ShoppingListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -472,16 +469,28 @@ namespace ShoppingListApi.Migrations
 
                     b.HasOne("ShoppingListApi.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ShoppingList");
 
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ShoppingListApi.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("ShoppingLists");
+                });
+
             modelBuilder.Entity("ShoppingListApi.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ShoppingListApi.Domain.Entities.ShoppingList", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

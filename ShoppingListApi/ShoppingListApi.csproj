@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="DTOs\ShoppingList\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 
 </Project>

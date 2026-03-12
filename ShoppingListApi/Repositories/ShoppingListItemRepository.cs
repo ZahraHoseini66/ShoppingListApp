@@ -13,14 +13,24 @@ public class ShoppingListItemRepository : IShoppingListItemRepository
     {
         _db = db; 
     }
-    public async Task<IResult> CreateShoppingListItems(int shoppingListId, List<ShoppingListItem> items)
+
+    public async Task<ShoppingListItem> CreateShippingListItemAsync(ShoppingListItem item)
     {
-        foreach (var item in items) {
-			await _db.ShoppingListItems.AddAsync(item);
-		}
-        return Ok();
-        
-       
-        
+        await _db.ShoppingListItems.AddAsync(item);
+        await _db.SaveChangesAsync();
+        return item;
     }
+
+
+    public async Task<IEnumerable<ShoppingListItem>> CreateShoppingListItemsAsync(IEnumerable<ShoppingListItem> items)
+    {
+       
+            await _db.ShoppingListItems.AddRangeAsync(items);
+            await _db.SaveChangesAsync();
+
+        return items;
+       
+    }
+
+    
 }

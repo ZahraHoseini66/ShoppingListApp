@@ -13,15 +13,19 @@ public class ShoppingListRepository : IShoppingListRepository
         _db = db;
         
     }
+
+    public async Task<ShoppingList> CreateShoppingListAsync(ShoppingList shoppingList)
+    {
+        await _db.ShoppingLists.AddAsync(shoppingList);
+        await _db.SaveChangesAsync();
+        return shoppingList;
+    }
+
     public async Task<IEnumerable<ShoppingList>> GetByUserIdAsync(string userId)
     {
         return await _db.ShoppingLists
-            .Where(sh => sh.UserID == userId).ToListAsync();
+            .Where(sh => sh.UserId == userId).ToListAsync();
     }
 
-    Task<ShoppingList> IShoppingListRepository.AddShoppingList(ShoppingList shoppingList)
-    {
-        _db.ShoppingLists.Add(shoppingList);
-        _db.SaveChanges();
-    }
+ 
 }

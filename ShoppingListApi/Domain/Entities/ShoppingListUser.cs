@@ -13,7 +13,7 @@ public class ShoppingListUser
     public PermissionLevel PermissionLevel { get; set; }
     public DateTime SharedAt { get; set; }
 
-    // Navigation Property
+    // Navigation Properties
     public ShoppingList ShoppingList { get; set; }
     public ApplicationUser User { get; set; }
 }

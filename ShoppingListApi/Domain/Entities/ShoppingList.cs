@@ -9,7 +9,7 @@ public class ShoppingList
     [Key]
     public int ShoppingListId { get; set; }
     public DateTime CreatedAt { get; set; }
-    public string UserID { get; set; }
+    public string UserId { get; set; }
     public string Title { get; set; }
     public ShoppingListStatus Status { get; set; }
 

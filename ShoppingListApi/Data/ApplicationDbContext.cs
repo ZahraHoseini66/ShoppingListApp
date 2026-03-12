@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using ShoppingListApi.Domain.Entities;
 using ShoppingListApi.Domain.Entities;
 
 namespace ShoppingListApi.Data;
@@ -15,7 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<ShoppingList> ShoppingLists  { get; set; }
+    public DbSet<ShoppingList> ShoppingLists { get; set; }
     public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
     public DbSet<ShoppingListUser> ShoppingListUsers { get; set; }
     public DbSet<ApplicationUser> Users { get; set; }
@@ -36,5 +34,31 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(p => p.Category)
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.CategoryId);
+
+        builder.Entity<ShoppingList>()
+            .HasOne(sh => sh.User)
+            .WithMany(u => u.ShoppingLists)
+            .HasForeignKey(sh => sh.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ShoppingList>()
+            .HasMany(sh => sh.Items)
+            .WithOne(item => item.ShoppingList)
+            .HasForeignKey(item => item.ShoppingListId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ShoppingListUser → ShoppingList: cascade (deleting a list removes its shares)
+        builder.Entity<ShoppingListUser>()
+            .HasOne(su => su.ShoppingList)
+            .WithMany()
+            .HasForeignKey(su => su.ShoppingListId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ShoppingListUser → User: restrict to avoid multiple cascade paths
+        builder.Entity<ShoppingListUser>()
+            .HasOne(su => su.User)
+            .WithMany()
+            .HasForeignKey(su => su.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

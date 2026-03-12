@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShoppingListApi.Domain.Entities;
 using ShoppingListApi.Repositories.Interfaces;
 
 namespace ShoppingListApi.Controllers;
@@ -9,7 +10,7 @@ namespace ShoppingListApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class ShoppingListsController : ControllerBase
+public class ShoppingListsController : ApiBaseController
 {
     private readonly IShoppingListRepository _shoppingListRepository;
     public ShoppingListsController(IShoppingListRepository shoppingListRepository)
@@ -17,18 +18,25 @@ public class ShoppingListsController : ControllerBase
       _shoppingListRepository = shoppingListRepository;  
     }
 
-    [HttpGet]
-	public async Task<IActionResult> ShoppingLists()
-	{
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId is null)
-            return Unauthorized();
+    //   [HttpGet]
+    //public async Task<IActionResult> ShoppingLists()
+    //{
+    //       if (UserId is null)
+    //           return Unauthorized();
 
-        var lists = await _shoppingListRepository.GetByUserIdAsync(userId);
-        return Ok(lists);
+    //       var lists = await _shoppingListRepository.GetByUserIdAsync(UserId);
+    //       return Ok(lists);
 
-	}
+    //}
 
     //[HttpPost]
-    //public async
+    //public IActionResult ShoppingLists([FromBody] ShoppingList shoppingList)
+    //{
+    //    if (shoppingList == null)
+    //    {
+    //        return BadRequest();
+    //    }
+
+
+    //}
 }
