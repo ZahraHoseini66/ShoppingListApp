@@ -1,9 +1,12 @@
 ﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingListApi.Domain.Entities;
+using ShoppingListApi.DTOs.ShoppingList;
 using ShoppingListApi.Repositories.Interfaces;
+using ShoppingListApi.Services.Interfaces;
 
 namespace ShoppingListApi.Controllers;
 
@@ -12,10 +15,10 @@ namespace ShoppingListApi.Controllers;
 [Authorize]
 public class ShoppingListsController : ApiBaseController
 {
-    private readonly IShoppingListRepository _shoppingListRepository;
-    public ShoppingListsController(IShoppingListRepository shoppingListRepository)
+    private readonly IShoppingListService _shoppingListService;
+    public ShoppingListsController(IShoppingListService shoppingListService)
     {
-      _shoppingListRepository = shoppingListRepository;  
+      _shoppingListService = shoppingListService;  
     }
 
     //   [HttpGet]
@@ -29,12 +32,20 @@ public class ShoppingListsController : ApiBaseController
 
     //}
 
-    //[HttpPost]
-    //public IActionResult CreateShoppingList([FromBody] ShoppingList shoppingList)
-    //{
-    //    if (shoppingList == null)
-    //    {
-    //        return BadRequest();
-    //    }
-    //}
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> CreateShoppingList([FromBody] CreateShoppingListRequest request)
+    {
+        if (request == null)
+        
+            return BadRequest();
+
+        if (UserId is null)
+            return Unauthorized();
+        var result = await _shoppingListService.CreateShoppingListAsync(UserId, request);
+        return CreatedAtAction(nameof(CreateShoppingList), new { id = result.ShoppingListId }, result);
+
+
+
+    }
 }

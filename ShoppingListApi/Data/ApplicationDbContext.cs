@@ -16,7 +16,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<ShoppingList> ShoppingLists { get; set; }
     public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
     public DbSet<ShoppingListUser> ShoppingListUsers { get; set; }
-    public DbSet<ApplicationUser> stores { get; set; }
     public DbSet<Store> Stores { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
