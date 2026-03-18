@@ -32,9 +32,9 @@ public class ShoppingListsController : ApiBaseController
 
     //}
 
-    [HttpPost]
+    [HttpPost("CreateShoppingList")]
     [Authorize]
-    public async Task<IActionResult> CreateShoppingList([FromBody] CreateShoppingListRequest request)
+    public async Task<IActionResult> CreateShoppingListAsync([FromBody] CreateShoppingListRequest request)
     {
         if (request == null)
         
@@ -43,7 +43,7 @@ public class ShoppingListsController : ApiBaseController
         if (UserId is null)
             return Unauthorized();
         var result = await _shoppingListService.CreateShoppingListAsync(UserId, request);
-        return CreatedAtAction(nameof(CreateShoppingList), new { id = result.ShoppingListId }, result);
+        return CreatedAtAction(nameof(CreateShoppingListAsync), new { id = result.ShoppingListId }, result);
 
 
 

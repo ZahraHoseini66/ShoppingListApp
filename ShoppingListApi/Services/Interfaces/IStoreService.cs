@@ -7,4 +7,5 @@ namespace ShoppingListApi.Services.Interfaces;
 public interface IStoreService
 {
 	Task<Store> CreateStoreAsync(String UserId,CreateStoreRequest request);
+	Task<Store> GetStoreByIdAsync(int  StoreId);
 }

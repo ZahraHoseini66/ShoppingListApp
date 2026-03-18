@@ -18,8 +18,14 @@ public class StoreService : IStoreService
         var store = new Store
         {
             StoreName = request.StoreName
+           
         };
 
        return await _repository.CreateStoreAsync(store);
+    }
+
+    public async Task<Store> GetStoreByIdAsync(int StoreId)
+    {
+       return await _repository.GetStoreByIdAsync(StoreId);
     }
 }

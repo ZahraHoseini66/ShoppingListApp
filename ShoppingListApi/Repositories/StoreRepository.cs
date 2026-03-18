@@ -19,4 +19,9 @@ public class StoreRepository : IStoreRepository
         await _db.SaveChangesAsync();
         return store;
     }
+
+    public async Task<Store> GetStoreByIdAsync(int StoreId)
+    {
+        return await _db.Stores.Where(s => s.StoreId == StoreId).FirstOrDefaultAsync();
+    }
 }

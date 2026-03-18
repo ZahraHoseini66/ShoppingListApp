@@ -58,8 +58,11 @@ builder.Services
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
+builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
 builder.Services.AddScoped<IShoppingListItemRepository, ShoppingListItemRepository>();
 builder.Services.AddScoped<IShoppingListItemService, ShoppingListItemService>();
+builder.Services.AddScoped<IStoreRepository, StoreRepository>();
+builder.Services.AddScoped<IStoreService, StoreService>();
 
 var app = builder.Build();
 
