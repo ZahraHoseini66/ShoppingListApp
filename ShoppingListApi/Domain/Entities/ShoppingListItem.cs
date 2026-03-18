@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using ShoppingListApi.Domain.Enums;
 
 namespace ShoppingListApi.Domain.Entities;
@@ -10,6 +11,7 @@ public class ShoppingListItem
     public int ShoppingListId { get; set; }
     public int ProductId { get; set; }
     public decimal Quantity { get; set; } //1,2,5
+    [Column("UnitId")]
     public UnitType Unit { get; set; } // "package","Kg","Liter"
 
     public bool IsChecked { get; set; }

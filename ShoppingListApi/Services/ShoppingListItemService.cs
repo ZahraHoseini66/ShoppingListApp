@@ -1,4 +1,6 @@
 ﻿using ShoppingListApi.Domain.Entities;
+using ShoppingListApi.DTOs.ShoppingList;
+using ShoppingListApi.DTOs.ShoppingListItem;
 using ShoppingListApi.Repositories.Interfaces;
 using ShoppingListApi.Services.Interfaces;
 
@@ -12,12 +14,20 @@ public class ShoppingListItemService : IShoppingListItemService
         _repository = repository;
         
     }
-    public async Task<ShoppingListItem> SaveShoppingListItemAsync(ShoppingListItem item)
+    public async Task<ShoppingListItem> CreateShoppingListItemAsync(CreateShoppingListItemRequest request)
     {
-        return await _repository.CreateShippingListItemAsync(item);
+        var shoppinglistItem = new ShoppingListItem()
+        {
+             ProductId = request.ProductId,
+             Quantity = request.Quantity,
+             ShoppingListId = request.ShoppingListId,
+             Unit = request.Unit,
+             IsChecked = request.IsChecked
+        };
+        return await _repository.CreateShippingListItemAsync(shoppinglistItem);
     }
 
-    public async Task<IEnumerable<ShoppingListItem>> SaveShoppingListItemsAsync(IEnumerable<ShoppingListItem> items)
+    public async Task<IEnumerable<ShoppingListItem>> CreateShoppingListItemsAsync(IEnumerable<ShoppingListItem> items)
     {
         return await _repository.CreateShoppingListItemsAsync(items);
     }

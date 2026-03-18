@@ -1,9 +1,10 @@
 ﻿using ShoppingListApi.Domain.Entities;
+using ShoppingListApi.DTOs.ShoppingListItem;
 
 namespace ShoppingListApi.Services.Interfaces;
 
 public interface IShoppingListItemService
 {
-	Task<ShoppingListItem> SaveShoppingListItemAsync(ShoppingListItem item);
-	Task<IEnumerable<ShoppingListItem>> SaveShoppingListItemsAsync(IEnumerable<ShoppingListItem> items);
+	Task<ShoppingListItem> CreateShoppingListItemAsync(CreateShoppingListItemRequest item);
+	Task<IEnumerable<ShoppingListItem>> CreateShoppingListItemsAsync(IEnumerable<ShoppingListItem> items);
 }
