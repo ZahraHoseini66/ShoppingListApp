@@ -6,6 +6,8 @@ namespace ShoppingListApi.Services.Interfaces;
 
 public interface IStoreService
 {
-	Task<Store> CreateStoreAsync(String UserId,CreateStoreRequest request);
-	Task<Store> GetStoreByIdAsync(int  StoreId);
+	Task<Store> CreateStoreAsync(String userId,CreateStoreRequest request);
+	Task<Store?> GetStoreByIdAsync(int  storeId);
+	Task<IEnumerable<Store>> GetStoreByStoreName(string storeName);
+	Task<bool> DeleteStoreByIdAsync(int storId);
 }

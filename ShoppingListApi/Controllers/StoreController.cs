@@ -10,7 +10,8 @@ namespace ShoppingListApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StoreController : ApiBaseController
+	[Authorize]
+	public class StoreController : ApiBaseController
     {
         private readonly IStoreService _storeService;
         public StoreController(IStoreService service)
@@ -18,18 +19,26 @@ namespace ShoppingListApi.Controllers
             _storeService = service;
         }
 
-        [HttpGet("{StoreId}", Name = "GetStoreById")]
-        [Authorize]
-        public async Task<IActionResult> GetStoreByIdAsync(int StoreId)
+        [HttpGet("GetStoreById")]
+        public async Task<IActionResult> GetStoreByIdAsync(int storeId)
         {
-            var result = await _storeService.GetStoreByIdAsync(StoreId);
+            var result = await _storeService.GetStoreByIdAsync(storeId);
             if (result is null)
                 return NotFound();
             return Ok(result);
+
+        }
+        [HttpGet("GetStoreByTitle")]
+        public async Task<IActionResult> GetStoreByTitleAsync(string storeName)
+        {
+          var result = await _storeService.GetStoreByStoreName(storeName);
+            if (result is null)
+                return NotFound();
+            return Ok(result);
+            
         }
 
-        [HttpPost("CreateStore")]
-        [Authorize]
+		[HttpPost("CreateStore")]
         public async Task<IActionResult> CreateStoreAsync([FromBody] CreateStoreRequest request)
         {
             if (request is null)
@@ -38,7 +47,19 @@ namespace ShoppingListApi.Controllers
                 return Unauthorized();
 
             var result = await _storeService.CreateStoreAsync(UserId, request);
-            return CreatedAtRoute("GetStoreById", new { StoreId = result.StoreId }, result);
+            //return CreatedAtRoute("GetStoreById", new { StoreId = result.StoreId }, result);
+            return Ok(result);
         }
-    }
+
+        [HttpDelete("DeleteStoreById")]
+        public async Task<IActionResult> DeleteStoreByIdAsync(int storeId)
+        {
+          var result= await _storeService.DeleteStoreByIdAsync(storeId);
+            if (!result)
+                return NotFound();
+            return Ok(result);
+            
+        }
+
+	}
 }

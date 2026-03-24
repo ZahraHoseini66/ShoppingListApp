@@ -2,6 +2,7 @@
 using ShoppingListApi.Domain.Entities;
 using ShoppingListApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace ShoppingListApi.Repositories;
@@ -20,8 +21,23 @@ public class StoreRepository : IStoreRepository
         return store;
     }
 
-    public async Task<Store> GetStoreByIdAsync(int StoreId)
+    public async Task<bool> DeleteStoreByIdAsync(int StoreId)
+    {
+        var store = await GetStoreByIdAsync(StoreId);
+        if (store is null)
+            return false;
+        _db.Stores.Remove(store);
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<Store?> GetStoreByIdAsync(int StoreId)
     {
         return await _db.Stores.Where(s => s.StoreId == StoreId).FirstOrDefaultAsync();
     }
+    public async Task<IEnumerable<Store>> GetStoreByStoreName(string storeName)
+    {
+        return await _db.Stores.Where( s => s.StoreName.Contains(storeName.Trim('"'))).ToListAsync();
+    }
+
 }
