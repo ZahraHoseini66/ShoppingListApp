@@ -10,6 +10,7 @@ namespace ShoppingListApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ShoppingListItemController : ControllerBase
 {
 	private readonly IShoppingListItemService _shoppingListItemService;
@@ -18,7 +19,7 @@ public class ShoppingListItemController : ControllerBase
         _shoppingListItemService = shoppingListItemService;
     }
     [HttpPost("CreateShoppingListItem")]
-    [Authorize]
+    
     public async Task<IActionResult> CreateShoppingListItemAsync([FromBody] CreateShoppingListItemRequest request)
     {
        var result = await _shoppingListItemService.CreateShoppingListItemAsync(request);

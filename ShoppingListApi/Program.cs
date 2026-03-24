@@ -63,6 +63,8 @@ builder.Services.AddScoped<IShoppingListItemRepository, ShoppingListItemReposito
 builder.Services.AddScoped<IShoppingListItemService, ShoppingListItemService>();
 builder.Services.AddScoped<IStoreRepository, StoreRepository>();
 builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

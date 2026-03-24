@@ -12,17 +12,17 @@ namespace ShoppingListApi.Controllers
     [ApiController]
     public class StoreController : ApiBaseController
     {
-        private readonly IStoreService _service;
+        private readonly IStoreService _storeService;
         public StoreController(IStoreService service)
         {
-            _service = service;
+            _storeService = service;
         }
 
         [HttpGet("{StoreId}", Name = "GetStoreById")]
         [Authorize]
         public async Task<IActionResult> GetStoreByIdAsync(int StoreId)
         {
-            var result = await _service.GetStoreByIdAsync(StoreId);
+            var result = await _storeService.GetStoreByIdAsync(StoreId);
             if (result is null)
                 return NotFound();
             return Ok(result);
@@ -37,7 +37,7 @@ namespace ShoppingListApi.Controllers
             if (UserId is null)
                 return Unauthorized();
 
-            var result = await _service.CreateStoreAsync(UserId, request);
+            var result = await _storeService.CreateStoreAsync(UserId, request);
             return CreatedAtRoute("GetStoreById", new { StoreId = result.StoreId }, result);
         }
     }
