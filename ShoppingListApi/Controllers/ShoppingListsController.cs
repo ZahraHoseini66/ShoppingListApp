@@ -1,34 +1,69 @@
 ﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShoppingListApi.Domain.Entities;
+using ShoppingListApi.DTOs.ShoppingList;
 using ShoppingListApi.Repositories.Interfaces;
+using ShoppingListApi.Services.Interfaces;
 
 namespace ShoppingListApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class ShoppingListsController : ControllerBase
+public class ShoppingListsController : ApiBaseController
 {
-    private readonly IShoppingListRepository _shoppingListRepository;
-    public ShoppingListsController(IShoppingListRepository shoppingListRepository)
+    private readonly IShoppingListService _shoppingListService;
+    public ShoppingListsController(IShoppingListService shoppingListService)
     {
-      _shoppingListRepository = shoppingListRepository;  
+        _shoppingListService = shoppingListService;
     }
 
-    [HttpGet]
-	public async Task<IActionResult> ShoppingLists()
-	{
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId is null)
+    [HttpPost("CreateShoppingList")]
+    [Authorize]
+    public async Task<IActionResult> CreateShoppingListAsync([FromBody] CreateShoppingListRequest request)
+    {
+        if (request == null)
+
+            return BadRequest();
+
+        if (UserId is null)
             return Unauthorized();
+        var result = await _shoppingListService.CreateShoppingListAsync(UserId, request);
+        return Ok(result);
+    }
+    [HttpGet("Search")]
+    public async Task<IActionResult> SearchAsync([FromQuery]ShoppingListSearchRequest request)
+    {
+       if(request == null)
+            return BadRequest();
+       if(UserId is null)
+            return Unauthorized();
+       var result = await _shoppingListService.SearchAsync(UserId, request);
+        return Ok(result);
+    }
 
-        var lists = await _shoppingListRepository.GetByUserIdAsync(userId);
-        return Ok(lists);
+    [HttpGet("GetByShoppingListId")]
+    public async Task<IActionResult> GetByShoppingListIdAsync(int shoppingListId)
+    {
+        if (shoppingListId == null)
+            return BadRequest();
+       var result = await _shoppingListService.GetByShoppingListIdAsync(shoppingListId);
+        return Ok(result);
 
-	}
+    }
 
-    //[HttpPost]
-    //public async
+    [HttpGet("GetByUserId")]
+    public async Task<IActionResult> GetByUserIdAsync(string userId)
+    {
+        if (userId == null)
+            return BadRequest();
+        var result = await _shoppingListService.GetByUserIdAsync(userId);
+        return Ok(result);
+
+
+    }
+
 }

@@ -8,6 +8,8 @@ using ShoppingListApi.Data;
 using ShoppingListApi.Domain.Entities;
 using ShoppingListApi.Repositories;
 using ShoppingListApi.Repositories.Interfaces;
+using ShoppingListApi.Services;
+using ShoppingListApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -56,6 +58,13 @@ builder.Services
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
+builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
+builder.Services.AddScoped<IShoppingListItemRepository, ShoppingListItemRepository>();
+builder.Services.AddScoped<IShoppingListItemService, ShoppingListItemService>();
+builder.Services.AddScoped<IStoreRepository, StoreRepository>();
+builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

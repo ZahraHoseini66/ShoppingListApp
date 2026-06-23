@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShoppingListApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,20 @@ namespace ShoppingListApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stores",
+                columns: table => new
+                {
+                    StoreId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StoreName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stores", x => x.StoreId);
                 });
 
             migrationBuilder.CreateTable(
@@ -199,20 +213,27 @@ namespace ShoppingListApi.Migrations
                 {
                     ShoppingListId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    usersId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    StoreId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShoppingLists", x => x.ShoppingListId);
                     table.ForeignKey(
-                        name: "FK_ShoppingLists_Users_usersId",
-                        column: x => x.usersId,
+                        name: "FK_ShoppingLists_Stores_StoreId",
+                        column: x => x.StoreId,
+                        principalTable: "Stores",
+                        principalColumn: "StoreId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingLists_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -251,10 +272,9 @@ namespace ShoppingListApi.Migrations
                     ShoppingListUserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ShoppingListId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PermissionLevel = table.Column<int>(type: "int", nullable: false),
-                    SharedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    SharedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -266,10 +286,11 @@ namespace ShoppingListApi.Migrations
                         principalColumn: "ShoppingListId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ShoppingListUsers_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_ShoppingListUsers_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -315,9 +336,14 @@ namespace ShoppingListApi.Migrations
                 column: "ShoppingListId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingLists_usersId",
+                name: "IX_ShoppingLists_StoreId",
                 table: "ShoppingLists",
-                column: "usersId");
+                column: "StoreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingLists_UserId",
+                table: "ShoppingLists",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShoppingListUsers_ShoppingListId",
@@ -325,9 +351,9 @@ namespace ShoppingListApi.Migrations
                 column: "ShoppingListId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingListUsers_UserId1",
+                name: "IX_ShoppingListUsers_UserId",
                 table: "ShoppingListUsers",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -377,6 +403,9 @@ namespace ShoppingListApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Stores");
 
             migrationBuilder.DropTable(
                 name: "Users");

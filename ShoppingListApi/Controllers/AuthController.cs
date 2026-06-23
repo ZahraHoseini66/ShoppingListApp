@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
 
 	[HttpPost("register")]
 	
-	public async Task<IActionResult> Register(RegisterRequest request)
+	public async Task<IActionResult> Register([FromBody]RegisterRequest request)
 	{
 		var user = new ApplicationUser
 		{
@@ -40,7 +40,8 @@ public class AuthController : ControllerBase
 			Email = request.Email,
 			FirstName = request.FirstName,
 			LastName = request.LastName,
-			RoleId = request.RoleId
+			RoleId = request.RoleId,
+			CreateAt = DateTime.UtcNow
 
 		};
 
@@ -56,7 +57,7 @@ public class AuthController : ControllerBase
 	}
 
 	[HttpPost("Login")]
-	public async Task<IActionResult> Login(LoginRequest request)
+	public async Task<IActionResult> Login([FromBody]LoginRequest request)
 	{
 		var user = await _userManager.FindByEmailAsync(request.Email);
 		if (user == null)
