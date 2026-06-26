@@ -10,7 +10,7 @@ public class ProductRepository:IProductRepository
 	private readonly ApplicationDbContext _db;
 	public ProductRepository(ApplicationDbContext db)
 	{
-		_db = db;
+		_db = db; ;
 	}
 
     public async Task<Product> CreateProductAsync(Product product)

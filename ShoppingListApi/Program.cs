@@ -2,23 +2,30 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ShoppingListApi.Data;
 using ShoppingListApi.Domain.Entities;
+using ShoppingListApi.Middleware;
+using ShoppingListApi.Filters;
 using ShoppingListApi.Repositories;
 using ShoppingListApi.Repositories.Interfaces;
 using ShoppingListApi.Services;
 using ShoppingListApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    // register validation filter globally
+    options.Filters.Add<ValidationFilter>();
+});
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(Options =>
     {
@@ -31,6 +38,7 @@ builder.Services
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!);
@@ -55,8 +63,9 @@ builder.Services
             ClockSkew = TimeSpan.Zero
         };
     });
+
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+
 builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
 builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
 builder.Services.AddScoped<IShoppingListItemRepository, ShoppingListItemRepository>();
@@ -69,14 +78,20 @@ builder.Services.AddScoped<IProductService, ProductService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+// Developer exception page in development helps debug; global middleware still returns JSON for APIs.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.MapOpenApi();
 }
+
+// Add centralized exception middleware so API always returns structured JSON
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

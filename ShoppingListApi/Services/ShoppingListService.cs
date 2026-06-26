@@ -14,7 +14,7 @@ public class ShoppingListService: IShoppingListService
         _repository = repository;
     }
 
-    public async Task<ShoppingList> CreateShoppingListAsync(string UserId, CreateShoppingListRequest request)
+    public async Task<ShoppingList> CreateShoppingListAsync(string userId, CreateShoppingListRequest request)
     {
         var shoppingList = new ShoppingList
         {
@@ -22,8 +22,15 @@ public class ShoppingListService: IShoppingListService
             StoreId = request.StoreId,
             Status = ShoppingListStatus.Active,
             CreatedAt = DateTime.UtcNow,
-            UserId = UserId
+            UserId = userId
         };
         return await _repository.CreateShoppingListAsync(shoppingList);
     }
+
+    public async Task<IEnumerable<ShoppingList>> GetShoppingListsByUserIdAsync(string userId)
+    {
+        return await _repository.GetByUserIdAsync(userId);
+    }
+
+    
 }
