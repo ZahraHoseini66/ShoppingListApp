@@ -27,36 +27,10 @@ public class ShoppingListItemService : IShoppingListItemService
         return await _repository.CreateShippingListItemAsync(shoppinglistItem);
     }
 
-    public async Task<IEnumerable<ShoppingListItem>> CreateShoppingListItemsAsync(IEnumerable<CreateShoppingListItemRequest> items)
+    public async Task<IEnumerable<ShoppingListItem>> CreateShoppingListItemsAsync(IEnumerable<ShoppingListItem> items)
     {
-		List<ShoppingListItem> shoppingListItems = new();
-		foreach (var item in items)
-		{
-			shoppingListItems.Add(new()
-			{
-				ProductId = item.ProductId,
-				Unit = item.Unit,
-				Quantity = item.Quantity,
-				IsChecked = item.IsChecked
-			});
-
-		}
-		return await _repository.CreateShoppingListItemsAsync(shoppingListItems);
+        return await _repository.CreateShoppingListItemsAsync(items);
     }
 
-    public async Task<bool> DeleteShoppingListItemByShoppingListIdAsync(int shoppingListId)
-    {
-       return await _repository.DeleteShoppingListItemByShoppingListIdAsync(shoppingListId);
-    }
 
-    public async Task<bool> DeleteShoppingListItemByShoppingListItemIdAsync(int shoppingListItemId)
-    {
-		return await _repository.DeleteShoppingListItemByShoppingListItemIdAsync(shoppingListItemId);
-
-	}
-
-	public async Task<IEnumerable<ShoppingListItem>> GetShoppingListItemByShoppingListIdAsync(int shoppingListId)
-    {
-       return await _repository.GetShoppingListItemByShoppingListIdAsync(shoppingListId);
-    }
 }

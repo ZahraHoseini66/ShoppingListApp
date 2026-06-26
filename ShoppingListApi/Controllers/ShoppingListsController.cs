@@ -13,7 +13,7 @@ public class ShoppingListsController : ApiBaseController
     private readonly IShoppingListService _shoppingListService;
     public ShoppingListsController(IShoppingListService shoppingListService)
     {
-        _shoppingListService = shoppingListService;
+      _shoppingListService = shoppingListService;  
     }
 
     //   [HttpGet]
@@ -48,8 +48,7 @@ public class ShoppingListsController : ApiBaseController
         var result = await _shoppingListService.GetByUserIdAsync(userId);
         return Ok(result);
 
-	}
-	[HttpGet("GetMyShoppingLists")]
 
     }
+
 }

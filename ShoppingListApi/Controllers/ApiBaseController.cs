@@ -9,5 +9,4 @@ namespace ShoppingListApi.Controllers;
 public class ApiBaseController : ControllerBase
 {
 	protected string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
-
 }
