@@ -27,7 +27,12 @@ public class ShoppingListService: IShoppingListService
         return await _repository.CreateShoppingListAsync(shoppingList);
     }
 
-    public async Task<IEnumerable<ShoppingList>> GetShoppingListsByUserIdAsync(string userId)
+    public Task<ShoppingListDetailsResponse?> GetShoppingListsByShoppingListIdAsync(string userId, int shoppingListId)
+    {
+        return _repository.GetByShoppingListIdAsync( userId,shoppingListId);
+    }
+
+    public async Task<IEnumerable<ShoppingListSummaryResponse>> GetShoppingListsByUserIdAsync(string userId)
     {
         return await _repository.GetByUserIdAsync(userId);
     }

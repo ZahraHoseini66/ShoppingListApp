@@ -32,5 +32,9 @@ public class ShoppingListItemService : IShoppingListItemService
         return await _repository.CreateShoppingListItemsAsync(items);
     }
 
+    public async Task<bool> UpdateCheckedStatusAsync(int shoppingListItemId, bool isChecked)
+    {
+        return await _repository.UpdateCheckedStatusAsync(shoppingListItemId, isChecked);
 
+    }
 }

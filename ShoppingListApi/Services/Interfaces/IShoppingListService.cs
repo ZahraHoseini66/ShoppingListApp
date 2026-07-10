@@ -6,5 +6,7 @@ namespace ShoppingListApi.Services.Interfaces;
 public interface IShoppingListService
 {
 	Task<ShoppingList> CreateShoppingListAsync(string userId, CreateShoppingListRequest request);
-	Task<IEnumerable<ShoppingList>> GetShoppingListsByUserIdAsync(string userId);
+	Task<IEnumerable<ShoppingListSummaryResponse>> GetShoppingListsByUserIdAsync(string userId);
+    Task<ShoppingListDetailsResponse?> GetShoppingListsByShoppingListIdAsync(string userId,int shoppingListId);
+
 }

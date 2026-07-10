@@ -28,8 +28,7 @@ public class ShoppingListsController : ApiBaseController
 		if (UserId is null)
 			return Unauthorized();
 		var result = await _shoppingListService.CreateShoppingListAsync(UserId, request);
-		return CreatedAtAction(nameof(CreateShoppingListAsync), new { id = result.ShoppingListId }, result);
-
+		return Ok(result);	
 
 	}
 	[HttpGet("GetMyShoppingLists")]
@@ -39,6 +38,18 @@ public class ShoppingListsController : ApiBaseController
 		if (UserId is null)
 			return Unauthorized();
 		var result = await _shoppingListService.GetShoppingListsByUserIdAsync(UserId);
+		
 		return Ok(result);
 	}
+	[HttpGet("GetShoppingListById")]
+	public async Task<IActionResult> GetShoppingListByShoppingListIdAsync(int shoppingListId)
+	  {
+		if(UserId is null)
+			return Unauthorized();
+		var result = await _shoppingListService.GetShoppingListsByShoppingListIdAsync(UserId, shoppingListId);
+		if(result == null)
+			return NotFound();
+		return Ok(result);
+
+    }
 }

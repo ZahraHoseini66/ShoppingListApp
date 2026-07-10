@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using ShoppingListApi.Data;
 using ShoppingListApi.Domain.Entities;
@@ -31,6 +32,20 @@ public class ShoppingListItemRepository : IShoppingListItemRepository
         return items;
        
     }
+    public async Task<bool> UpdateCheckedStatusAsync(int shoppingListItemId, bool isChecked)
+    {
 
-    
+         ShoppingListItem? shoppingListItem = await _db.ShoppingListItems
+    .Where(sh => sh.ShoppingListItemId == shoppingListItemId)
+    .FirstOrDefaultAsync();
+        if (shoppingListItem is null)
+            return false;
+        shoppingListItem.IsChecked = isChecked;     
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+
+
+
 }
