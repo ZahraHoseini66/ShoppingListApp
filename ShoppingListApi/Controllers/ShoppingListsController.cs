@@ -16,9 +16,7 @@ public class ShoppingListsController : ApiBaseController
 		_shoppingListService = shoppingListService;
 	}
 
-
-
-	[HttpPost("CreateShoppingList")]
+    [HttpPost]
 	public async Task<IActionResult> CreateShoppingListAsync([FromBody] CreateShoppingListRequest request)
 	{
 		if (request == null)
@@ -31,8 +29,8 @@ public class ShoppingListsController : ApiBaseController
 		return Ok(result);	
 
 	}
-	[HttpGet("GetMyShoppingLists")]
-
+	
+	[HttpGet]
 	public async Task<IActionResult> GetMyShoppingListsAsync()
 	{
 		if (UserId is null)
@@ -41,7 +39,8 @@ public class ShoppingListsController : ApiBaseController
 		
 		return Ok(result);
 	}
-	[HttpGet("GetShoppingListById")]
+
+	[HttpGet("{shoppingListId}")]
 	public async Task<IActionResult> GetShoppingListByShoppingListIdAsync(int shoppingListId)
 	  {
 		if(UserId is null)

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
+﻿using Microsoft.EntityFrameworkCore;
 using ShoppingListApi.Data;
 using ShoppingListApi.Domain.Entities;
 using ShoppingListApi.Repositories.Interfaces;
@@ -32,11 +30,23 @@ public class ShoppingListItemRepository : IShoppingListItemRepository
         return items;
        
     }
-    public async Task<bool> UpdateCheckedStatusAsync(int shoppingListItemId, bool isChecked)
+
+    public async Task<bool> DeleteShoppingListItemAsync(string userId, int shoppingListItemId)
+    {
+        var shoppingListItem = await _db.ShoppingListItems.Where(sh => sh.ShoppingList.UserId == userId && sh.ShoppingListItemId == shoppingListItemId).FirstOrDefaultAsync();
+        if ( shoppingListItem is null)
+            return false;
+         _db.ShoppingListItems.Remove(shoppingListItem);
+        await _db.SaveChangesAsync();
+        return true ;
+
+    }
+
+    public async Task<bool> UpdateCheckedStatusAsync(string userId ,int shoppingListItemId, bool isChecked)
     {
 
          ShoppingListItem? shoppingListItem = await _db.ShoppingListItems
-    .Where(sh => sh.ShoppingListItemId == shoppingListItemId)
+    .Where(sh => sh.ShoppingListItemId == shoppingListItemId && sh.ShoppingList.UserId == userId)
     .FirstOrDefaultAsync();
         if (shoppingListItem is null)
             return false;
@@ -44,8 +54,5 @@ public class ShoppingListItemRepository : IShoppingListItemRepository
         await _db.SaveChangesAsync();
         return true;
     }
-
-
-
 
 }

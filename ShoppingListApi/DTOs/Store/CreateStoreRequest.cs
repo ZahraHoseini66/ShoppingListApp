@@ -1,6 +1,10 @@
-﻿namespace ShoppingListApi.DTOs.Store;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ShoppingListApi.DTOs.Store;
 
 public class CreateStoreRequest
 {
-	public string StoreName { get; set; }	
+	[Required]
+	[StringLength(100)]
+	public string StoreName { get; set; }	= string.Empty;
 }

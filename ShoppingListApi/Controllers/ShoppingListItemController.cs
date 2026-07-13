@@ -8,25 +8,39 @@ namespace ShoppingListApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class ShoppingListItemController : ControllerBase
+public class ShoppingListItemController : ApiBaseController
 {
 	private readonly IShoppingListItemService _shoppingListItemService;
     public ShoppingListItemController(IShoppingListItemService shoppingListItemService)
     {
         _shoppingListItemService = shoppingListItemService;
     }
-    [HttpPost("CreateShoppingListItem")]
-    
+
+    [HttpPost]
     public async Task<IActionResult> CreateShoppingListItemAsync([FromBody] CreateShoppingListItemRequest request)
     {
        var result = await _shoppingListItemService.CreateShoppingListItemAsync(request);
         return Ok(result);
     }
-    [HttpPost("UpdateCheckedStatus")]
+
+    [HttpPost("{shoppingListItemId}/checked")]
     public async Task<IActionResult> UpdateCheckedStatusAsync( int shoppingListItemId, bool isChecked)
     {
-        var result = await _shoppingListItemService.UpdateCheckedStatusAsync(shoppingListItemId, isChecked);
+       if(UserId is null)
+            return Unauthorized();
+        var result = await _shoppingListItemService.UpdateCheckedStatusAsync(UserId, shoppingListItemId, isChecked);
         if(!result)
+            return NotFound();
+        return Ok(result);
+    }
+
+    [HttpDelete("{shoppingListItemId}")]
+    public async Task<IActionResult> DeleteShoppingListItemAsync(int shoppingListItemId)
+    {
+        if (UserId is null)
+            return Unauthorized();
+        var result = await _shoppingListItemService.DeleteShoppingListItemAsync(UserId, shoppingListItemId);
+        if (!result)
             return NotFound();
         return Ok(result);
     }

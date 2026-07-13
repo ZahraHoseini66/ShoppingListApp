@@ -32,9 +32,14 @@ public class ShoppingListItemService : IShoppingListItemService
         return await _repository.CreateShoppingListItemsAsync(items);
     }
 
-    public async Task<bool> UpdateCheckedStatusAsync(int shoppingListItemId, bool isChecked)
+    public async Task<bool> UpdateCheckedStatusAsync(string userId, int shoppingListItemId, bool isChecked)
     {
-        return await _repository.UpdateCheckedStatusAsync(shoppingListItemId, isChecked);
+        return await _repository.UpdateCheckedStatusAsync(userId, shoppingListItemId, isChecked);
 
+    }
+
+    public async Task<bool> DeleteShoppingListItemAsync(string userId, int shoppingListItemId)
+    {
+        return await _repository.DeleteShoppingListItemAsync(userId, shoppingListItemId);
     }
 }
