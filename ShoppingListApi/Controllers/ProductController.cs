@@ -1,11 +1,5 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShoppingListApi.Data;
-using ShoppingListApi.Domain.Entities;
 using ShoppingListApi.DTOs.Product;
 using ShoppingListApi.Services.Interfaces;
 
@@ -22,18 +16,24 @@ public class ProductController : ControllerBase
     {
         _productService = productService;
     }
+
     [HttpPost]
     public async Task<IActionResult> CreateProductAsync([FromBody] CreateProductRequest request)
     {
        var result = await _productService.CreateProductAsync(request);
 		return Ok(result);
 	}
+   
     [HttpGet("{productId}")]
     public async Task<IActionResult> GetProductByIdAsync(int productId)
     {
        var result = await _productService.GetProductByIdAsync(productId);
+        if (result == null) 
+            return NotFound();  
+   
        return Ok(result);
     }
+   
     [HttpGet("search")]
     public async Task<IActionResult> GetProductsByTitleAsync([FromQuery]string title)
     {
