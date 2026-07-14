@@ -22,6 +22,45 @@ Content-Type: application/json
   "password": "your-password"
 }
 
+### Create product
+POST {{baseUrl}}/api/Product
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Milk",
+  "categoryId": 1
+}
+
+### Get product by id
+GET {{baseUrl}}/api/Product/1
+Authorization: Bearer {{token}}
+
+### Search products by title
+GET {{baseUrl}}/api/Product/search?title=milk
+Authorization: Bearer {{token}}
+
+### Create store
+POST {{baseUrl}}/api/Store
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "storeName": "Aldi"
+}
+
+### Get store by id
+GET {{baseUrl}}/api/Store/1
+Authorization: Bearer {{token}}
+
+### Search store by name
+GET {{baseUrl}}/api/Store/search?storeName=Aldi
+Authorization: Bearer {{token}}
+
+### Delete store
+DELETE {{baseUrl}}/api/Store/1
+Authorization: Bearer {{token}}
+
 ### Get my shopping lists
 GET {{baseUrl}}/api/ShoppingLists
 Authorization: Bearer {{token}}
