@@ -22,20 +22,20 @@ public class ProductController : ControllerBase
     {
         _productService = productService;
     }
-    [HttpPost("CreateProduct")]
+    [HttpPost]
     public async Task<IActionResult> CreateProductAsync([FromBody] CreateProductRequest request)
     {
        var result = await _productService.CreateProductAsync(request);
 		return Ok(result);
 	}
-    [HttpGet("GetProductById")]
+    [HttpGet("{productId}")]
     public async Task<IActionResult> GetProductByIdAsync(int productId)
     {
        var result = await _productService.GetProductByIdAsync(productId);
        return Ok(result);
     }
-    [HttpGet("GetProductsByTitle")]
-    public async Task<IActionResult> GetProductsByTitleAsync(string title)
+    [HttpGet("search")]
+    public async Task<IActionResult> GetProductsByTitleAsync([FromQuery]string title)
     {
         var result = await _productService.GetProductsByTitleAsync(title);
         return Ok(result);

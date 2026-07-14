@@ -19,7 +19,7 @@ namespace ShoppingListApi.Controllers
             _storeService = service;
         }
 
-        [HttpGet("GetStoreById")]
+        [HttpGet("{storeId}")]
         public async Task<IActionResult> GetStoreByIdAsync(int storeId)
         {
             var result = await _storeService.GetStoreByIdAsync(storeId);
@@ -28,8 +28,9 @@ namespace ShoppingListApi.Controllers
             return Ok(result);
 
         }
-        [HttpGet("GetStoreByTitle")]
-        public async Task<IActionResult> GetStoreByTitleAsync(string storeName)
+
+        [HttpGet("search")]
+        public async Task<IActionResult> GetStoreByTitleAsync([FromQuery]string storeName)
         {
           var result = await _storeService.GetStoreByStoreName(storeName);
             if (result is null)
@@ -38,7 +39,7 @@ namespace ShoppingListApi.Controllers
             
         }
 
-		[HttpPost("CreateStore")]
+		[HttpPost]
         public async Task<IActionResult> CreateStoreAsync([FromBody] CreateStoreRequest request)
         {
             if (request is null)
@@ -51,7 +52,7 @@ namespace ShoppingListApi.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("DeleteStoreById")]
+        [HttpDelete("{storeId}")]
         public async Task<IActionResult> DeleteStoreByIdAsync(int storeId)
         {
           var result= await _storeService.DeleteStoreByIdAsync(storeId);
