@@ -1,5 +1,9 @@
 @baseUrl = http://localhost:5232
 @token = paste-your-token-here
+@productId = 1
+@storeId = 1
+@shoppingListId = 1
+@shoppingListItemId = 1
 
 ### Register
 POST {{baseUrl}}/api/Auth/register
@@ -33,7 +37,7 @@ Content-Type: application/json
 }
 
 ### Get product by id
-GET {{baseUrl}}/api/Product/1
+GET {{baseUrl}}/api/Product/{{productId}}
 Authorization: Bearer {{token}}
 
 ### Search products by title
@@ -50,15 +54,11 @@ Content-Type: application/json
 }
 
 ### Get store by id
-GET {{baseUrl}}/api/Store/1
+GET {{baseUrl}}/api/Store/{{storeId}}
 Authorization: Bearer {{token}}
 
 ### Search store by name
 GET {{baseUrl}}/api/Store/search?storeName=Aldi
-Authorization: Bearer {{token}}
-
-### Delete store
-DELETE {{baseUrl}}/api/Store/1
 Authorization: Bearer {{token}}
 
 ### Get my shopping lists
@@ -72,11 +72,11 @@ Content-Type: application/json
 
 {
   "title": "Weekly groceries",
-  "storeId": 1
+  "storeId": {{storeId}}
 }
 
 ### Get shopping list by id
-GET {{baseUrl}}/api/ShoppingLists/1
+GET {{baseUrl}}/api/ShoppingLists/{{shoppingListId}}
 Authorization: Bearer {{token}}
 
 ### Create shopping list item
@@ -85,21 +85,25 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "shoppingListId": 1,
-  "productId": 1,
+  "shoppingListId": {{shoppingListId}},
+  "productId": {{productId}},
   "quantity": 2,
   "unit": 0,
   "isChecked": false
 }
 
 ### Check item
-POST {{baseUrl}}/api/ShoppingListItem/1/checked?isChecked=true
+POST {{baseUrl}}/api/ShoppingListItem/{{shoppingListItemId}}/checked?isChecked=true
 Authorization: Bearer {{token}}
 
 ### Uncheck item
-POST {{baseUrl}}/api/ShoppingListItem/1/checked?isChecked=false
+POST {{baseUrl}}/api/ShoppingListItem/{{shoppingListItemId}}/checked?isChecked=false
 Authorization: Bearer {{token}}
 
 ### Delete item
-DELETE {{baseUrl}}/api/ShoppingListItem/1
+DELETE {{baseUrl}}/api/ShoppingListItem/{{shoppingListItemId}}
+Authorization: Bearer {{token}}
+
+### Delete store
+DELETE {{baseUrl}}/api/Store/{{storeId}}
 Authorization: Bearer {{token}}

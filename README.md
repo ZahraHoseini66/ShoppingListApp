@@ -71,11 +71,21 @@ Build the project:
 dotnet build
 ```
 
+## Database Setup
+
+This project currently uses SQL Server. The development connection string is configured in:
+
+```text
+ShoppingListApi/appsettings.Development.json
+```
+
 Apply database migrations:
 
 ```powershell
 dotnet ef database update --project ShoppingListApi
 ```
+
+The API does not include a demo database yet, so products, stores, shopping lists, and shopping list items should be created through the API demo requests after registration and login.
 
 Run the API:
 
@@ -160,21 +170,11 @@ Suggested test order:
 1. Register a user
 2. Login and copy the JWT token
 3. Paste the token into `@token`
-4. Create a product and store
-5. Create a shopping list and shopping list items
-6. Test list details, check/uncheck, and delete item requests
-
-## Example Flow
-
-1. Register or login
-2. Copy the JWT token
-3. Create a store
-4. Create a product
-5. Create a shopping list
-6. Add an item to the shopping list
-7. Get shopping list details
-8. Check or uncheck the item
-9. Delete the item
+4. Create a product and copy its returned id into `@productId`
+5. Create a store and copy its returned id into `@storeId`
+6. Create a shopping list and copy its returned id into `@shoppingListId`
+7. Create a shopping list item and copy its returned id into `@shoppingListItemId`
+8. Test list details, check/uncheck, and delete requests
 
 ## What This Project Demonstrates
 
