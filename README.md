@@ -127,19 +127,32 @@ DELETE /api/ShoppingListItem/{shoppingListItemId}
 ### Stores
 
 ```text
-POST   /api/Store/CreateStore
-GET    /api/Store/GetStoreById
-GET    /api/Store/GetStoreByTitle
-DELETE /api/Store/DeleteStoreById
+POST   /api/Store
+GET    /api/Store/{storeId}
+GET    /api/Store/search?storeName=Aldi
+DELETE /api/Store/{storeId}
 ```
 
 ### Products
 
 ```text
-POST /api/Product/CreateProduct
-GET  /api/Product/GetProductById
-GET  /api/Product/GetProductsByTitle
+POST /api/Product
+GET  /api/Product/{productId}
+GET  /api/Product/search?title=milk
 ```
+
+## API Demo Requests
+
+Ready-to-run demo requests are available in `ShoppingListApi/ShoppingListApi.http`.
+
+Suggested test order:
+
+1. Register a user
+2. Login and copy the JWT token
+3. Paste the token into `@token`
+4. Create a product and store
+5. Create a shopping list and shopping list items
+6. Test list details, check/uncheck, and delete item requests
 
 ## Example Flow
 
@@ -172,7 +185,6 @@ This project demonstrates backend development skills including:
 This project is a backend portfolio API focused on the core features of a shopping list application.
 Future improvements may include:
 
-- More REST-style cleanup for store and product routes
 - Swagger JWT authorization setup
 - Integration tests
 - Deployment
