@@ -1,6 +1,66 @@
-@ShoppingListApi_HostAddress = http://localhost:5232
+@baseUrl = http://localhost:5232
+@token = paste-your-token-here
 
-GET {{ShoppingListApi_HostAddress}}/weatherforecast/
-Accept: application/json
+### Register
+POST {{baseUrl}}/api/Auth/register
+Content-Type: application/json
 
-###
+{
+  "email": "your-email@example.com",
+  "password": "your-password",
+  "firstName": "YourFirstName",
+  "lastName": "YourLastName",
+  "roleId": 1
+}
+
+### Login
+POST {{baseUrl}}/api/Auth/Login
+Content-Type: application/json
+
+{
+  "email": "your-email@example.com",
+  "password": "your-password"
+}
+
+### Get my shopping lists
+GET {{baseUrl}}/api/ShoppingLists
+Authorization: Bearer {{token}}
+
+### Create shopping list
+POST {{baseUrl}}/api/ShoppingLists
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Weekly groceries",
+  "storeId": 1
+}
+
+### Get shopping list by id
+GET {{baseUrl}}/api/ShoppingLists/1
+Authorization: Bearer {{token}}
+
+### Create shopping list item
+POST {{baseUrl}}/api/ShoppingListItem
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "shoppingListId": 1,
+  "productId": 1,
+  "quantity": 2,
+  "unit": 0,
+  "isChecked": false
+}
+
+### Check item
+POST {{baseUrl}}/api/ShoppingListItem/1/checked?isChecked=true
+Authorization: Bearer {{token}}
+
+### Uncheck item
+POST {{baseUrl}}/api/ShoppingListItem/1/checked?isChecked=false
+Authorization: Bearer {{token}}
+
+### Delete item
+DELETE {{baseUrl}}/api/ShoppingListItem/1
+Authorization: Bearer {{token}}
