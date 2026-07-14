@@ -99,6 +99,16 @@ First register or login, then send the token in the request header:
 Authorization: Bearer <your-token>
 ```
 
+## OpenAPI
+
+When running in development mode, the OpenAPI document is available at:
+
+```text
+http://localhost:5232/openapi/v1.json
+```
+
+Protected endpoints require a JWT bearer token. Use the demo requests in `ShoppingListApi/ShoppingListApi.http` to register, login, and send authenticated requests.
+
 ## Main API Endpoints
 
 ### Auth
