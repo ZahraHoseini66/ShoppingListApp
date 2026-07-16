@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="ShoppingListApi.Tests/ShoppingListApi.Tests.csproj" Id="c44ee3d6-40a2-445d-830b-47b541f7bf00" />
   <Project Path="ShoppingListApi/ShoppingListApi.csproj" />
 </Solution>
