@@ -35,7 +35,7 @@ public class StoreService : IStoreService
     {
        return await _repository.GetStoreByIdAsync(storeId);
     }
-    public Task<IEnumerable<Store>> GetStoreByStoreName(string storeName)
+    public Task<IEnumerable<Store>> GetStoresByStoreNameAsync(string storeName)
     {
        return _repository.GetStoreByStoreName(storeName);
     }

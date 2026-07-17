@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ShoppingListApi.Domain.Entities;
+﻿using ShoppingListApi.Domain.Entities;
 
 namespace ShoppingListApi.Repositories.Interfaces;
 

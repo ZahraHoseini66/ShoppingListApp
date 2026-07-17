@@ -32,7 +32,7 @@ namespace ShoppingListApi.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> GetStoreByTitleAsync([FromQuery]string storeName)
         {
-          var result = await _storeService.GetStoreByStoreName(storeName);
+          var result = await _storeService.GetStoresByStoreNameAsync(storeName);
             if (result is null)
                 return NotFound();
             return Ok(result);

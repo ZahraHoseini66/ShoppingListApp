@@ -2,7 +2,6 @@
 using ShoppingListApi.Domain.Entities;
 using ShoppingListApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 
 
 namespace ShoppingListApi.Repositories;
