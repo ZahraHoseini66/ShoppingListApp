@@ -83,6 +83,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.MapOpenApi();
+
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    await DevelopmentDataSeeder.SeedAsync(dbContext, userManager);
 }
 
 // Add centralized exception middleware so API always returns structured JSON
