@@ -5,6 +5,10 @@
 @shoppingListId = 1
 @shoppingListItemId = 1
 
+### Demo user
+# Email: demo@shoppinglist.local
+# Password: Demo@123
+
 ### Register
 POST {{baseUrl}}/api/Auth/register
 Content-Type: application/json
@@ -22,8 +26,8 @@ POST {{baseUrl}}/api/Auth/Login
 Content-Type: application/json
 
 {
-  "email": "your-email@example.com",
-  "password": "your-password"
+  "email": "demo@shoppinglist.local",
+  "password": "Demo@123"
 }
 
 ### Create product
