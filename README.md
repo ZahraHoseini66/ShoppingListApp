@@ -192,6 +192,9 @@ Current unit test coverage includes:
 - `StoreService`
 - `ShoppingListService`
 - `ShoppingListItemService`
+- Request DTO validation
+
+Validation tests use `System.ComponentModel.DataAnnotations.Validator` to verify request DTO rules.
 
 ## What This Project Demonstrates
 
