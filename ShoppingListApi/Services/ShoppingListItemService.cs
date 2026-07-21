@@ -1,5 +1,4 @@
 ﻿using ShoppingListApi.Domain.Entities;
-using ShoppingListApi.DTOs.ShoppingList;
 using ShoppingListApi.DTOs.ShoppingListItem;
 using ShoppingListApi.Repositories.Interfaces;
 using ShoppingListApi.Services.Interfaces;
@@ -27,9 +26,23 @@ public class ShoppingListItemService : IShoppingListItemService
         return await _repository.CreateShippingListItemAsync(shoppinglistItem);
     }
 
-    public async Task<IEnumerable<ShoppingListItem>> CreateShoppingListItemsAsync(IEnumerable<ShoppingListItem> items)
+    public async Task<IEnumerable<ShoppingListItem>> CreateShoppingListItemsAsync(IEnumerable<CreateShoppingListItemRequest> items)
     {
-        return await _repository.CreateShoppingListItemsAsync(items);
+       var shoppingListItems = new List<ShoppingListItem>();
+        foreach (var item in items)
+        {
+            
+            var shoppinglistItem = new ShoppingListItem()
+            {
+                ProductId = item.ProductId,
+                Quantity = item.Quantity,
+                ShoppingListId = item.ShoppingListId,
+                Unit = item.Unit,
+                IsChecked = item.IsChecked
+            };
+            shoppingListItems.Add(shoppinglistItem);
+        }
+        return await _repository.CreateShoppingListItemsAsync(shoppingListItems);
     }
 
     public async Task<bool> UpdateCheckedStatusAsync(string userId, int shoppingListItemId, bool isChecked)
