@@ -176,6 +176,23 @@ Suggested test order:
 7. Create a shopping list item and copy its returned id into `@shoppingListItemId`
 8. Test list details, check/uncheck, and delete requests
 
+## Testing
+
+Automated tests are in the `ShoppingListApi.Tests` project.
+
+Run tests with:
+
+```powershell
+dotnet test
+```
+
+Current unit test coverage includes:
+
+- `ProductService`
+- `StoreService`
+- `ShoppingListService`
+- `ShoppingListItemService`
+
 ## What This Project Demonstrates
 
 This project demonstrates backend development skills including:
