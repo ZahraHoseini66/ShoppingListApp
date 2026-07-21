@@ -4,7 +4,7 @@ using ShoppingListApi.DTOs.Store;
 using ShoppingListApi.Repositories.Interfaces;
 using ShoppingListApi.Services;
 
-namespace ShoppingListApi.Tests
+namespace ShoppingListApi.Tests.Services
 {
     public class StoreServiceTests
     {

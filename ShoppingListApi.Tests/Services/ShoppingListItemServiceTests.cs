@@ -7,7 +7,7 @@ using ShoppingListApi.Repositories.Interfaces;
 using ShoppingListApi.Services;
 using ShoppingListApi.Services.Interfaces;
 
-namespace ShoppingListApi.Tests
+namespace ShoppingListApi.Tests.Services
 {
     public class ShoppingListItemServiceTests
     {
