@@ -85,7 +85,20 @@ Apply database migrations:
 dotnet ef database update --project ShoppingListApi
 ```
 
-The API does not include a demo database yet, so products, stores, shopping lists, and shopping list items should be created through the API demo requests after registration and login.
+Development seed data is created automatically when the API runs in Development. You can also create additional products, stores, shopping lists, and shopping list items through the API demo requests.
+
+## Development Demo Data
+
+When the API runs in Development, it seeds demo data automatically if it does not already exist.
+
+Demo login:
+
+```text
+Email: demo@shoppinglist.local
+Password: Demo@123
+```
+
+The seed includes demo stores, products, one shopping list, and shopping list items.
 
 Run the API:
 
