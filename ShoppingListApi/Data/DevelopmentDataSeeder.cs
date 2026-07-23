@@ -36,12 +36,29 @@ public static class DevelopmentDataSeeder
             }
         }
 
-        if (!await dbContext.Stores.AnyAsync(store => store.UserId == demoUser.Id && store.StoreName == "Aldi"))
-            dbContext.Stores.Add(new Store { StoreName = "Aldi", UserId = demoUser.Id });
+        var publicStoreNames = new[]
+{
+        "Penny",
+        "Lidl",
+        "Aldi",
+        "Rewe"
+};
 
-        if (!await dbContext.Stores.AnyAsync(store => store.UserId == demoUser.Id && store.StoreName == "Lidl"))
-            dbContext.Stores.Add(new Store { StoreName = "Lidl", UserId = demoUser.Id });
+        foreach (var storeName in publicStoreNames)
+        {
+            var exists = await dbContext.Stores.AnyAsync(store =>
+                store.UserId == null &&
+                store.StoreName == storeName);
 
+            if (!exists)
+            {
+                dbContext.Stores.Add(new Store
+                {
+                    StoreName = storeName,
+                    UserId = null
+                });
+            }
+        }
         if (!await dbContext.Products.AnyAsync(product => product.Title == "Milk"))
             dbContext.Products.Add(new Product { Title = "Milk" });
 
@@ -54,7 +71,9 @@ public static class DevelopmentDataSeeder
         await dbContext.SaveChangesAsync();
 
         var demoStore = await dbContext.Stores
-            .FirstAsync(store => store.UserId == demoUser.Id);
+    .FirstAsync(store =>
+        store.UserId == null &&
+        store.StoreName == "Aldi");
 
         var demoProducts = await dbContext.Products
             .Where(product => product.Title == "Milk" || product.Title == "Bread" || product.Title == "Eggs")

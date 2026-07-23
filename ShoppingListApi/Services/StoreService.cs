@@ -13,21 +13,21 @@ public class StoreService : IStoreService
         _repository = repository;
         
     }
-    public async Task<Store> CreateStoreAsync(string userId, CreateStoreRequest request)
+    public async Task<Store?> CreateStoreAsync(string userId, CreateStoreRequest request)
     {
         var store = new Store
         {
-            StoreName = request.StoreName,
+            StoreName = request.StoreName.Trim(),
              UserId = userId
            
         };
 
-       return await _repository.CreateStoreAsync(store);
+       return await _repository.CreateStoreAsync(userId, store);
     }
 
-    public async Task<bool> DeleteStoreByIdAsync(int storId)
+    public async Task<bool> DeleteStoreByIdAsync(string userId, int storId)
     {
-      return  await _repository.DeleteStoreByIdAsync(storId);
+      return  await _repository.DeleteStoreByIdAsync(userId, storId);
 
     }
 
@@ -35,8 +35,8 @@ public class StoreService : IStoreService
     {
        return await _repository.GetStoreByIdAsync(storeId);
     }
-    public Task<IEnumerable<Store>> GetStoresByStoreNameAsync(string storeName)
+    public Task<IEnumerable<Store>> GetStoresByStoreNameAsync(string userId, string storeName)
     {
-       return _repository.GetStoreByStoreName(storeName);
+       return _repository.GetStoreByStoreName(userId, storeName);
     }
 }

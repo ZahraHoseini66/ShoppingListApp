@@ -15,8 +15,8 @@ namespace ShoppingListApi.Tests.Services
             var storeRequest = new CreateStoreRequest() { StoreName = "Aldi" };
 
             var repositoryMock = new Mock<IStoreRepository>();
-            repositoryMock.Setup(repository => repository.CreateStoreAsync(It.IsAny<Store>()))
-                .ReturnsAsync((Store store) => store);
+            repositoryMock.Setup(repository => repository.CreateStoreAsync(userId, It.IsAny<Store>()))
+                .ReturnsAsync((string userId , Store store) => store);
 
             var storeService = new StoreService(repositoryMock.Object);
             var result = await storeService.CreateStoreAsync(userId , storeRequest);
@@ -25,7 +25,7 @@ namespace ShoppingListApi.Tests.Services
             Assert.Equal(userId, result.UserId);
 
             repositoryMock.Verify(repository =>
-            repository.CreateStoreAsync(It.Is<Store>(store =>
+            repository.CreateStoreAsync(userId, It.Is<Store>(store =>
             store.StoreName == storeRequest.StoreName &&
             store.UserId == userId)),
             Times.Once);
@@ -53,6 +53,7 @@ namespace ShoppingListApi.Tests.Services
         [Fact]
         public async Task GetStoresByStoreNameAsync_WhenStoresExist_ReturnsStores()
         {
+            const string userId = "user1";
             var title = "Aldi";
             List<Store> stores = new()
             {
@@ -61,15 +62,15 @@ namespace ShoppingListApi.Tests.Services
             };
 
             var repositoryMock = new Mock<IStoreRepository>();
-            repositoryMock.Setup(repository => repository.GetStoreByStoreName(title))
+            repositoryMock.Setup(repository => repository.GetStoreByStoreName(userId, title))
                 .ReturnsAsync(stores);
 
             var storeService = new StoreService(repositoryMock.Object);
-            var result = await storeService.GetStoresByStoreNameAsync(title);
+            var result = await storeService.GetStoresByStoreNameAsync(userId, title);
 
             Assert.Same(stores, result);
 
-            repositoryMock.Verify(repository => repository.GetStoreByStoreName(title), Times.Once);
+            repositoryMock.Verify(repository => repository.GetStoreByStoreName(userId, title), Times.Once);
             
         }
 
@@ -77,16 +78,17 @@ namespace ShoppingListApi.Tests.Services
         public async Task DeleteStoreByIdAsync_WhenStoreExist_ReturnsTrue()
         {
             var storeId = 1;
+            const string userId = "user1";
 
             var repositoryMock = new Mock<IStoreRepository>();
-            repositoryMock.Setup(repository => repository.DeleteStoreByIdAsync(storeId))
+            repositoryMock.Setup(repository => repository.DeleteStoreByIdAsync(userId, storeId))
                 .ReturnsAsync(true);
             var storeService = new StoreService(repositoryMock.Object);
-            var result = await storeService.DeleteStoreByIdAsync(storeId);
+            var result = await storeService.DeleteStoreByIdAsync(userId, storeId);
 
             Assert.True(result);
 
-            repositoryMock.Verify(repository => repository.DeleteStoreByIdAsync(storeId),Times.Once);
+            repositoryMock.Verify(repository => repository.DeleteStoreByIdAsync( userId, storeId),Times.Once);
 
             
         }
@@ -96,16 +98,17 @@ namespace ShoppingListApi.Tests.Services
         public async Task DeleteStoreByIdAsync_WhenStoreDoesNotExist_ReturnsFalse()
         {
             var storeId = 1;
+            const string userId = "user1";
 
             var repositoryMock = new Mock<IStoreRepository>();
-            repositoryMock.Setup(repository => repository.DeleteStoreByIdAsync(storeId))
+            repositoryMock.Setup(repository => repository.DeleteStoreByIdAsync(userId, storeId))
                 .ReturnsAsync(false);
             var storeService = new StoreService(repositoryMock.Object);
-            var result = await storeService.DeleteStoreByIdAsync(storeId);
+            var result = await storeService.DeleteStoreByIdAsync(userId, storeId);
 
             Assert.False(result);
 
-            repositoryMock.Verify(repository => repository.DeleteStoreByIdAsync(storeId), Times.Once);
+            repositoryMock.Verify(repository => repository.DeleteStoreByIdAsync(userId, storeId), Times.Once);
 
 
         }

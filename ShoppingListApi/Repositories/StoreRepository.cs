@@ -13,16 +13,22 @@ public class StoreRepository : IStoreRepository
     {
         _db = db;
     }
-    public async Task<Store> CreateStoreAsync(Store store)
+    public async Task<Store?> CreateStoreAsync(string userId, Store store)
     {
-        await _db.Stores.AddAsync(store);
-        await _db.SaveChangesAsync();
-        return store;
+        bool storeIsExist = await StoreExistsForUserAsync(userId, store.StoreName);
+        if (!storeIsExist)
+        {
+            await _db.Stores.AddAsync(store);
+            await _db.SaveChangesAsync();
+            return store;
+        }
+        return null;
     }
 
-    public async Task<bool> DeleteStoreByIdAsync(int StoreId)
+    public async Task<bool> DeleteStoreByIdAsync(string userId, int storeId)
     {
-        var store = await GetStoreByIdAsync(StoreId);
+
+        var store = await _db.Stores.Where(s => s.StoreId == storeId && s.UserId == userId).FirstOrDefaultAsync();
         if (store is null)
             return false;
         _db.Stores.Remove(store);
@@ -30,13 +36,19 @@ public class StoreRepository : IStoreRepository
         return true;
     }
 
-    public async Task<Store?> GetStoreByIdAsync(int StoreId)
+    public async Task<Store?> GetStoreByIdAsync(int storeId)
     {
-        return await _db.Stores.Where(s => s.StoreId == StoreId).FirstOrDefaultAsync();
+        return await _db.Stores.Where(s => s.StoreId == storeId).FirstOrDefaultAsync();
     }
-    public async Task<IEnumerable<Store>> GetStoreByStoreName(string storeName)
+    public async Task<IEnumerable<Store>> GetStoreByStoreName(string userId, string storeName)
     {
-        return await _db.Stores.Where( s => s.StoreName.Contains(storeName.Trim('"'))).ToListAsync();
+        return await _db.Stores.Where(s => (s.UserId == null || s.UserId == userId)
+        && s.StoreName.Contains(storeName.Trim('"'))).OrderBy(store => store.UserId == null ? 0 : 1)
+        .ThenBy(store => store.StoreName).ToListAsync();
     }
+    public async Task<bool> StoreExistsForUserAsync(string userId, string storeName)
+    {
+        return await _db.Stores.AnyAsync(s => s.UserId == userId && s.StoreName == storeName);
 
+    }
 }

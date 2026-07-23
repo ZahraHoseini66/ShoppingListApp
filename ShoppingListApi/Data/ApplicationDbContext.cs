@@ -50,10 +50,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ShoppingList>()
             .HasOne(sh => sh.Store)
             .WithMany(s => s.shoppingLists)
-            .HasForeignKey(sh => sh.StoreId);
+            .HasForeignKey(sh => sh.StoreId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-		// ShoppingListUser → ShoppingList: cascade (deleting a list removes its shares)
-		builder.Entity<ShoppingListUser>()
+        // ShoppingListUser → ShoppingList: cascade (deleting a list removes its shares)
+        builder.Entity<ShoppingListUser>()
             .HasOne(su => su.ShoppingList)
             .WithMany()
             .HasForeignKey(su => su.ShoppingListId)
@@ -65,8 +66,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(su => su.UserId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+        builder.Entity<Store>()
+            .HasOne(s => s.User)
+            .WithMany(user => user.Stores)
+            .HasForeignKey(s => s.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        
+        builder.Entity<Store>()
+            .HasIndex(s => new { s.UserId, s.StoreName })
+            .IsUnique();
+
+
+
     }
 }

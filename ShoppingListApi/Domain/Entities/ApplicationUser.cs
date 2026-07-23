@@ -13,4 +13,6 @@ public class ApplicationUser : IdentityUser
 
 	// Navigation Properties
 	public ICollection<ShoppingList> ShoppingLists { get; set; } = [];
+    public ICollection<Store> Stores { get; set; } = [];
+
 }

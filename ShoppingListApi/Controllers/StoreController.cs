@@ -32,10 +32,11 @@ namespace ShoppingListApi.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> GetStoreByTitleAsync([FromQuery]string storeName)
         {
-          var result = await _storeService.GetStoresByStoreNameAsync(storeName);
-            if (result is null)
-                return NotFound();
-            return Ok(result);
+            if (UserId is null)
+                return Unauthorized();
+
+          var result = await _storeService.GetStoresByStoreNameAsync(UserId, storeName);
+           return Ok(result);
             
         }
 
@@ -49,13 +50,18 @@ namespace ShoppingListApi.Controllers
 
             var result = await _storeService.CreateStoreAsync(UserId, request);
             //return CreatedAtRoute("GetStoreById", new { StoreId = result.StoreId }, result);
+            if (result is null)
+                return Conflict("Store already exists for this user.");
             return Ok(result);
         }
 
         [HttpDelete("{storeId}")]
         public async Task<IActionResult> DeleteStoreByIdAsync(int storeId)
         {
-          var result= await _storeService.DeleteStoreByIdAsync(storeId);
+            if (UserId is null)
+                return Unauthorized();
+
+          var result= await _storeService.DeleteStoreByIdAsync(UserId, storeId);
             if (!result)
                 return NotFound();
             return Ok(result);
